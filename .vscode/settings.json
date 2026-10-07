@@ -1,0 +1,40 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "Mysql",
+            "database": "DataWarehouse",
+            "username": "vinayak",
+            "askForPassword": true
+        },
+        {
+            "connectionTimeout": 15,
+            "mssqlOptions": {
+                "appName": "SQLTools",
+                "useUTC": true,
+                "encrypt": true,
+                "trustServerCertificate": true
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "127.0.0.1",
+            "port": 1433,
+            "askForPassword": true,
+            "sshOptions": {
+                "port": 22
+            },
+            "driver": "MSSQL",
+            "name": "Data Warehouse - Local",
+            "database": "master",
+            "username": "sa"
+        }
+    ]
+}

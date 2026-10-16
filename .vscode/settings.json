@@ -33,7 +33,7 @@
             },
             "driver": "MSSQL",
             "name": "Data Warehouse - Local",
-            "database": "master",
+            "database": "DataWarehouse",
             "username": "sa"
         }
     ]

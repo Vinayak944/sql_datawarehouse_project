@@ -33,7 +33,8 @@ WHERE cst_firstname != TRIM(cst_firstname);
 SELECT cst_key
 FROM bronze.crm_cust_info
 WHERE cst_lastname != TRIM(cst_lastname);
-*/
+
+
 
 SELECT cst_key
 FROM silver.crm_cust_info
@@ -63,6 +64,14 @@ WHERE cst_firstname != TRIM(cst_firstname);
 SELECT cst_key
 FROM silver.crm_cust_info
 WHERE cst_lastname != TRIM(cst_lastname);
+*/
+SELECT cst_create_date,
+      ISDATE(cst_create_date),
+      CAST(REPLACE(cst_create_date, CHAR(13),'') AS DATE),
+      ISDATE(REPLACE(cst_create_date, CHAR(13),''))
+FROM bronze.crm_cust_info
 
 SELECT * 
 FROM silver.crm_cust_info;
+
+DROP TABLE silver.crm_cust_info;

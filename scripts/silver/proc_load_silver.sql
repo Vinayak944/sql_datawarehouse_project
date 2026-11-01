@@ -21,8 +21,9 @@ SELECT  cst_id,
             WHEN UPPER(cst_gndr) = 'M' THEN 'Male'
             ELSE 'N/A'
         END cst_gndr,
-        cst_create_date
+        CAST(REPLACE(cst_create_date, CHAR(13),'') AS DATE) cst_create_date
 FROM (SELECT *,
              ROW_NUMBER() OVER(PARTITION BY cst_id ORDER BY cst_create_date DESC) AS flag_last
-      FROM bronze.crm_cust_info)t
+      FROM bronze.crm_cust_info
+      WHERE cst_id IS NOT NULL)t
 WHERE flag_last =1;

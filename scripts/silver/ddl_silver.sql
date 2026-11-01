@@ -1,25 +1,26 @@
 IF OBJECT_ID('silver.crm_cust_info','U') IS NOT NULL
     DROP TABLE silver.crm_cust_info;
 CREATE TABLE silver.crm_cust_info(
-    cst_id	INT,
-    cst_key NVARCHAR(50),
-    cst_firstname NVARCHAR(50),
-    cst_lastname NVARCHAR(50),
-    cst_marital_status NVARCHAR(50),
-    cst_gndr NVARCHAR(50),
-    cst_create_date VARCHAR(50)
+    cst_id	                INT,
+    cst_key                 NVARCHAR(50),
+    cst_firstname           NVARCHAR(50),
+    cst_lastname            NVARCHAR(50),
+    cst_marital_status      NVARCHAR(50),
+    cst_gndr                NVARCHAR(50),
+    cst_create_date         DATE
 );
 ------------------------------------------------------------------
 IF OBJECT_ID('silver.crm_prd_info','U') IS NOT NULL
     DROP TABLE silver.crm_prd_info;
 CREATE TABLE silver.crm_prd_info(
-    prd_id INT,
-    prd_key NVARCHAR(50),
-    prd_nm NVARCHAR(50),
-    prd_cost INT,
-    prd_line NVARCHAR(50),
-    prd_start_dt VARCHAR(50),
-    prd_end_dt VARCHAR(50)
+    prd_id          INT,
+    cat_id          NVARCHAR(50),
+    prd_key         NVARCHAR(50),
+    prd_nm          NVARCHAR(50),
+    prd_cost        INT,
+    prd_line        NVARCHAR(50),
+    prd_start_dt    DATE,
+    prd_end_dt      DATE
 );
 ------------------------------------------------------------------
 IF OBJECT_ID('silver.crm_sales_details','U') IS NOT NULL

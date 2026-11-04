@@ -1,8 +1,14 @@
+--EXEC bronze.load_bronze;
+
 CREATE OR ALTER PROCEDURE bronze.load_bronze AS
 BEGIN
+
     DECLARE @start_time DATETIME, @end_time DATETIME, @batch_start_time DATETIME, @batch_end_time DATETIME;
+
     BEGIN TRY
+
         SET @batch_start_time = GETDATE();
+
         PRINT '================================================';
         PRINT 'LOADING BRONZE LAYER';
         PRINT '================================================';
@@ -12,6 +18,7 @@ BEGIN
         PRINT '------------------------------------------------';
 
         SET @start_time = GETDATE();
+
         PRINT '>> TRUNCATING TABLE: bronze.crm_cust_info';
         TRUNCATE TABLE bronze.crm_cust_info;
 
@@ -23,11 +30,13 @@ BEGIN
             FIELDTERMINATOR = ',',
             TABLOCK
         );
+
         SET @end_time = GETDATE();
         PRINT 'LOAD DURATION: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds'
         PRINT '---------------'
 
         SET @start_time = GETDATE();
+
         PRINT '>> TRUNCATING TABLE: bronze.crm_prd_info';
         TRUNCATE TABLE bronze.crm_prd_info;
 
@@ -39,11 +48,13 @@ BEGIN
             FIELDTERMINATOR = ',',
             TABLOCK
         );
+
         SET @end_time = GETDATE();
         PRINT 'LOAD DURATION: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds'
         PRINT '---------------'
 
         SET @start_time = GETDATE();
+
         PRINT '>> TRUNCATING TABLE: bronze.crm_sales_details';
         TRUNCATE TABLE bronze.crm_sales_details;
 
@@ -55,6 +66,7 @@ BEGIN
             FIELDTERMINATOR = ',',
             TABLOCK
         );
+
         SET @end_time = GETDATE();
         PRINT 'LOAD DURATION: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds'
         PRINT '---------------'
@@ -64,6 +76,7 @@ BEGIN
         PRINT '------------------------------------------------';
 
         SET @start_time = GETDATE();
+
         PRINT '>> TRUNCATING TABLE: bronze.erp_cust_az12';
         TRUNCATE TABLE bronze.erp_cust_az12;
 
@@ -75,11 +88,13 @@ BEGIN
             FIELDTERMINATOR = ',',
             TABLOCK
         );
+
         SET @end_time = GETDATE();
         PRINT 'LOAD DURATION: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds'
         PRINT '---------------'
 
         SET @start_time = GETDATE();
+
         PRINT '>> TRUNCATING TABLE: bronze.erp_loc_a101';
         TRUNCATE TABLE bronze.erp_loc_a101;
 
@@ -91,11 +106,13 @@ BEGIN
             FIELDTERMINATOR = ',',
             TABLOCK
         );
+
         SET @end_time = GETDATE();
         PRINT 'LOAD DURATION: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds'
         PRINT '---------------'
 
         SET @start_time = GETDATE();
+
         PRINT '>> TRUNCATING TABLE: bronze.erp_px_cat_g1v2';
         TRUNCATE TABLE bronze.erp_px_cat_g1v2;
 
@@ -107,18 +124,24 @@ BEGIN
             FIELDTERMINATOR = ',',
             TABLOCK
         );
+
         SET @end_time = GETDATE();
         PRINT 'LOAD DURATION: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds'
+
         PRINT '========================================='
         SET @batch_end_time = GETDATE();
         PRINT 'TOTAL BRONZE LOAD DURATION: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + 'seconds'
         PRINT '========================================='
+
     END TRY
+
     BEGIN CATCH
+
         PRINT '========================================';
         PRINT 'ERROR OCCURED DURING LOADING BROZE LAYER';
         PRINT 'ERROR MESSAGE:' + ERROR_MESSAGE();
         PRINT 'ERROR STATE:' + CAST(ERROR_STATE() AS NVARCHAR);
         PRINT '========================================';
+
     END CATCH
 END

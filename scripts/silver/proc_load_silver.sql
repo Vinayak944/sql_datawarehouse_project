@@ -112,7 +112,7 @@ SELECT
             WHEN UPPER(TRIM(REPLACE(gen, CHAR(13),''))) IN ('M','MALE') THEN 'Male'
             ELSE 'n/a'
       END AS gen
-FROM bronze.erp_cust_az12;
+FROM DataWarehouse.bronze.erp_cust_az12;
 --------------------------------------------------------------------------------------------------
 
 INSERT INTO silver.erp_loc_a101(
@@ -126,5 +126,17 @@ SELECT REPLACE(cid, '-', '') AS cid,
             WHEN UPPER(REPLACE(TRIM(cntry), CHAR(13),'')) = '' OR cntry IS NULL THEN 'n/a'
             ELSE REPLACE(TRIM(cntry), CHAR(13),'')
       END AS cntry
-FROM bronze.erp_loc_a101;
+FROM DataWarehouse.bronze.erp_loc_a101;
 --------------------------------------------------------------------------------------
+
+INSERT INTO silver.erp_px_cat_g1v2(
+      id,
+      cat,
+      subcat,
+      maintenance
+)
+SELECT id,
+       cat,
+       subcat,
+       REPLACE(maintenance, CHAR(13), '')
+FROM DataWarehouse.bronze.erp_px_cat_g1v2;

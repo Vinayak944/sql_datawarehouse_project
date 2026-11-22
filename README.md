@@ -14,6 +14,7 @@ An end-to-end **SQL Server** data warehouse for CRM and ERP sales data. It loads
 - [Architecture](#architecture)
 - [What’s included](#whats-included)
 - [Repository layout](#repository-layout)
+- [Documentation](#documentation)
 - [Prerequisites](#prerequisites)
 - [Setup and run](#setup-and-run)
 - [Tests and data quality checks](#tests-and-data-quality-checks)
@@ -56,11 +57,22 @@ The SQL implementation is under `scripts/`; the database container mounts `datas
 │   ├── bronze/           # Bronze table definitions and load procedure
 │   ├── silver/           # Silver table definitions and transformation procedure
 │   └── gold/             # Analytical view definitions
+├── docs/                 # Project scope, lineage, model, catalog, and checks
 ├── tests/                # SQL load and quality-check scripts
 ├── docker-compose.yml    # SQL Server 2022 container configuration
 ├── .gitignore            # Excludes the local .env file
 └── LICENSE
 ```
+
+## Documentation
+
+- [Project overview](docs/project_overview.md) — goals, scope, and current limitations.
+- [Data architecture](docs/data_architecture.md) — system components and medallion layers.
+- [Data flow](docs/data_flow.md) — source-to-table lineage through the warehouse.
+- [Data model](docs/data_model.md) — Gold views, fields, and logical relationships.
+- [Data catalog](docs/data_catalog.md) — source files, layer tables, and Gold outputs.
+- [Data quality checks](docs/data_quality_checks.md) — what the SQL check scripts inspect and important execution notes.
+- [Naming conventions](docs/naming_conventions.md) — naming patterns observed in the current scripts.
 
 ## Prerequisites
 
@@ -110,7 +122,7 @@ Run the SQL files in this order against the SQL Server instance:
 
 5. Run `scripts/gold/ddl_gold.sql` to create the Gold views.
 
-The initialization script creates schemas directly, so use it for a fresh database setup. The layer DDL scripts drop and recreate their corresponding tables; running them again removes the existing rows in those tables. The Bronze load procedure truncates and reloads Bronze tables, and the Silver procedure truncates and rebuilds Silver tables.
+After initialization, make sure your SQL client is connected to the `DataWarehouse` database before running the table, procedure, and Gold scripts. The initialization script creates schemas directly, so use it for a fresh database setup. The layer DDL scripts drop and recreate their corresponding tables; running them again removes the existing rows in those tables. The Bronze load procedure truncates and reloads Bronze tables, and the Silver procedure truncates and rebuilds Silver tables.
 
 ### 4. Query the Gold views
 
@@ -130,7 +142,7 @@ docker compose stop
 
 ## Tests and data quality checks
 
-The `tests/` directory contains SQL scripts for loading selected Silver tables, checking CRM and ERP Silver data, and validating the Gold customer, product, and sales views. Run the relevant scripts in a SQL Server client after the corresponding tables or views have been created.
+The `tests/` directory contains SQL scripts for loading selected Silver tables, checking CRM and ERP Silver data, and validating the Gold customer, product, and sales views. Review the [data quality notes](docs/data_quality_checks.md) before running them; these are SQL scripts rather than an automated test runner.
 
 ## License
 

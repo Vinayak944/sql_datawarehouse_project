@@ -60,7 +60,7 @@ The SQL implementation is under `scripts/`; the database container mounts `datas
 ├── docs/                 # Project scope, lineage, model, catalog, and checks
 ├── tests/                # SQL load and quality-check scripts
 ├── docker-compose.yml    # SQL Server 2022 container configuration
-├── .gitignore            # Excludes the local .env file
+├── .gitignore            # Excludes the local .env and .vscode/ file
 └── LICENSE
 ```
 

@@ -1,100 +1,145 @@
+# SQL Data Warehouse Project
 
-# Data Warehouse and Analytics Project
+[![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC2927?logo=microsoftsqlserver&logoColor=white)](https://www.microsoft.com/sql-server)
+[![T-SQL](https://img.shields.io/badge/Language-T--SQL-4479A1)](https://learn.microsoft.com/sql/t-sql/language-reference)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-Welcome to the **Data Warehouse and Analytics Project** repository! 🚀  
-This project demonstrates a comprehensive data warehousing and analytics solution, from building a data warehouse to generating actionable insights. Designed as a portfolio project.
+An end-to-end **SQL Server** data warehouse for CRM and ERP sales data. It loads source CSVs into Bronze, cleans and standardizes them in Silver, then presents customer, product, and sales views in Gold.
 
----
-## 🏗️ Data Architecture
+**Stack:** Microsoft SQL Server 2022 · T-SQL · Docker Compose  
+**Sources:** CRM and ERP CSV files in `datasets/`
 
-The data architecture for this project follows Medallion Architecture **Bronze**, **Silver**, and **Gold** layers:
+## Contents
 
-1. **Bronze Layer**: Stores raw data as-is from the source systems. Data is ingested from CSV Files into SQL Server Database.
-2. **Silver Layer**: This layer includes data cleansing, standardisation, and normalisation processes to prepare data for analysis.
-3. **Gold Layer**: Houses business-ready data modelled into a star schema required for reporting and analytics.
+- [Architecture](#architecture)
+- [What’s included](#whats-included)
+- [Repository layout](#repository-layout)
+- [Prerequisites](#prerequisites)
+- [Setup and run](#setup-and-run)
+- [Tests and data quality checks](#tests-and-data-quality-checks)
+- [About me](#about-me)
 
----
-## 📖 Project Overview
+## Architecture
 
-This project involves:
-
-1. **Data Architecture**: Designing a Modern Data Warehouse Using Medallion Architecture **Bronze**, **Silver**, and **Gold** layers.
-2. **ETL Pipelines**: Extracting, transforming, and loading data from source systems into the warehouse.
-3. **Data Modelling**: Developing fact and dimension tables optimised for analytical queries.
-4. **Analytics & Reporting**: Creating SQL-based reports and dashboards for actionable insights.
-
-🎯 This repository is an excellent resource for professionals and students looking to showcase expertise in:
-- SQL Development
-- Data Architect
-- Data Engineering  
-- ETL Pipeline Developer  
-- Data Modelling  
-- Data Analytics  
-
----
-## 🚀 Project Requirements
-
-### Building the Data Warehouse (Data Engineering)
-
-#### Objective
-Develop a modern data warehouse using SQL Server to consolidate sales data, enabling analytical reporting and informed decision-making.
-
-#### Specifications
-- **Data Sources**: Import data from two source systems (ERP and CRM) provided as CSV files.
-- **Data Quality**: Cleanse and resolve data quality issues prior to analysis.
-- **Integration**: Combine both sources into a single, user-friendly data model designed for analytical queries.
-- **Scope**: Focus on the latest dataset only; historisation of data is not required.
-- **Documentation**: Provide clear documentation of the data model to support both business stakeholders and analytics teams.
-
----
-
-### BI: Analytics & Reporting (Data Analysis)
-
-#### Objective
-Develop SQL-based analytics to deliver detailed insights into:
-- **Customer Behaviour**
-- **Product Performance**
-- **Sales Trends**
-
-These insights empower stakeholders with key business metrics, enabling strategic decision-making.  
-
-For more details, refer to [docs/requirements.md](docs/requirements.md).
-
-## 📂 Repository Structure
+```mermaid
+flowchart LR
+    CRM[CRM CSV files] --> B[Bronze tables]
+    ERP[ERP CSV files] --> B
+    B -->|clean and standardize| S[Silver tables]
+    S -->|join and model| G[Gold views]
+    G --> A[Analytical queries]
 ```
-data-warehouse-project/
-│
-├── datasets/                           # Raw datasets used for the project (ERP and CRM data)
-│
-├── docs/                               # Project documentation and architecture details
-│   ├── etl.drawio                      # Draw.io file shows all different techniquies and methods of ETL
-│   ├── data_architecture.drawio        # Draw.io file shows the project's architecture
-│   ├── data_catalog.md                 # Catalog of datasets, including field descriptions and metadata
-│   ├── data_flow.drawio                # Draw.io file for the data flow diagram
-│   ├── data_models.drawio              # Draw.io file for data models (star schema)
-│   ├── naming-conventions.md           # Consistent naming guidelines for tables, columns, and files
-│
-├── scripts/                            # SQL scripts for ETL and transformations
-│   ├── bronze/                         # Scripts for extracting and loading raw data
-│   ├── silver/                         # Scripts for cleaning and transforming data
-│   ├── gold/                           # Scripts for creating analytical models
-│
-├── tests/                              # Test scripts and quality files
-│
-├── README.md                           # Project overview and instructions
-├── LICENSE                             # License information for the repository
-├── .gitignore                          # Files and directories to be ignored by Git
-└── requirements.txt                    # Dependencies and requirements for the project
+
+- **Bronze** stores source records loaded from the CSV files.
+- **Silver** applies cleaning and standardization.
+- **Gold** exposes customer and product dimensions and a sales fact view.
+
+The SQL implementation is under `scripts/`; the database container mounts `datasets/` read-only at `/datasets` for bulk loading.
+
+## What’s included
+
+- SQL Server database and Bronze, Silver, and Gold schemas.
+- Bulk-load procedure for the CRM and ERP CSV inputs.
+- Silver-layer transformation procedure.
+- Gold views: `gold.dim_customers`, `gold.dim_products`, and `gold.facts_sales`.
+- SQL scripts for data quality checks and Gold-layer checks under `tests/`.
+
+## Repository layout
+
+```text
+.
+├── datasets/
+│   ├── source_crm/       # Customer, product, and sales CSV files
+│   └── source_erp/       # Customer, location, and category CSV files
+├── scripts/
+│   ├── init_database.sql
+│   ├── bronze/           # Bronze table definitions and load procedure
+│   ├── silver/           # Silver table definitions and transformation procedure
+│   └── gold/             # Analytical view definitions
+├── tests/                # SQL load and quality-check scripts
+├── docker-compose.yml    # SQL Server 2022 container configuration
+├── .gitignore            # Excludes the local .env file
+└── LICENSE
 ```
----
 
+## Prerequisites
 
-## 🛡️ License
+- Docker Engine with the Docker Compose plugin.
+- A SQL Server client capable of connecting to a SQL Server instance.
 
-This project is licensed under the [MIT License](LICENSE). You are free to use, modify, and share this project with proper attribution.
+## Setup and run
 
-## 🌟 About Me
+### 1. Configure the SQL Server password
 
-Hi! I'm **Vinayak Ganesh**. I’m an IT professional .
+The Compose configuration requires `MSSQL_SA_PASSWORD` from a local `.env` file. The `.env` file is ignored by Git.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/vinayakganesh94)
+Create `.env` in the repository root with a strong SQL Server password:
+
+```dotenv
+MSSQL_SA_PASSWORD=replace_with_a_strong_password
+```
+
+Do not commit the real password.
+
+### 2. Create the persistent Docker volume and start SQL Server
+
+The Compose file uses the external named volume `sqlserver-data`; create it once before starting the service:
+
+```bash
+docker volume create sqlserver-data
+docker compose up -d
+```
+
+This starts the SQL Server 2022 container and publishes port 1433 on localhost. The CSV directory is mounted read-only inside the container. The volume keeps SQL Server data across container restarts.
+
+Connect your SQL Server client to `localhost,1433` with the `sa` login and the password from `.env`.
+
+### 3. Initialize and build the warehouse
+
+Run the SQL files in this order against the SQL Server instance:
+
+1. `scripts/init_database.sql` — creates the `DataWarehouse` database and its schemas.
+2. `scripts/bronze/ddl_bronze.sql` and `scripts/silver/ddl_silver.sql` — create the layer tables.
+3. `scripts/bronze/proc_load_bronze.sql` and `scripts/silver/proc_load_silver.sql` — define the load procedures.
+4. Execute the Bronze and Silver loads:
+
+   ```sql
+   EXEC bronze.load_bronze;
+   EXEC silver.load_silver;
+   ```
+
+5. Run `scripts/gold/ddl_gold.sql` to create the Gold views.
+
+The initialization script creates schemas directly, so use it for a fresh database setup. The layer DDL scripts drop and recreate their corresponding tables; running them again removes the existing rows in those tables. The Bronze load procedure truncates and reloads Bronze tables, and the Silver procedure truncates and rebuilds Silver tables.
+
+### 4. Query the Gold views
+
+After the Gold views are created, query them from the `DataWarehouse` database:
+
+```sql
+SELECT TOP (10) * FROM gold.dim_customers;
+SELECT TOP (10) * FROM gold.dim_products;
+SELECT TOP (10) * FROM gold.facts_sales;
+```
+
+To stop the container while preserving the database volume:
+
+```bash
+docker compose stop
+```
+
+## Tests and data quality checks
+
+The `tests/` directory contains SQL scripts for loading selected Silver tables, checking CRM and ERP Silver data, and validating the Gold customer, product, and sales views. Run the relevant scripts in a SQL Server client after the corresponding tables or views have been created.
+
+## License
+
+This project is available under the [MIT License](LICENSE).
+
+## About me
+
+I’m **Vinayak Ganesh**, an IT professional interested in data engineering, SQL, and analytics. I built this project to explore how raw CRM and ERP data can be organized into a warehouse, cleaned through Bronze and Silver layers, and shaped into Gold views for analysis.
+
+I enjoy learning by building practical projects and documenting the decisions and workflow along the way. I’m continuing to grow my skills in SQL Server, data modeling, and end-to-end data warehousing.
+
+[Connect with me on LinkedIn](https://linkedin.com/in/vinayakganesh94)
